@@ -51,7 +51,7 @@ Para configurar as credenciais padrão, defina as seguintes variáveis de ambien
 - `INTERBANK_CLIENT_ID`: O ID do cliente obtido no detalhe da tela de aplicações no IB.
 - `INTERBANK_CLIENT_SECRET`: O segredo do cliente obtido no detalhe da tela de aplicações no IB.
 - `INTERBANK_SCOPES`: Deve ser uma lista separada por vírgulas dos escopos desejados.
-- `INTERBANK_TLS_PATH`: Caminho para um arquivo contendo o certificado e a chave (tls.key e tls.crt).
+- `INTERBANK_TLS_PATH`: O caminho para a pasta onde o certificado TLS está localizado. O certificado deve ser nomeado `tls.crt` e a chave privada `tls.key`.
 - `INTERBANK_USE_SANDBOX`: Define se a aplicação deve usar o ambiente de sandbox.
 
 #### Funções Principais
