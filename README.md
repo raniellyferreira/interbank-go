@@ -5,7 +5,7 @@ A biblioteca `interbank-go` é uma implementação em Go para interagir com a AP
 ## Como usar
 
 ```go
-// Cria um cliente usando as variaveis de ambiente (INTERBANK_CLIENT_ID, INTERBANK_CLIENT_SECRET, INTERBANK_SCOPES e INTERBANK_TLS_PATH)
+// Cria um cliente usando as variáveis de ambiente (INTERBANK_CLIENT_ID, INTERBANK_CLIENT_SECRET, INTERBANK_SCOPES e INTERBANK_TLS_PATH)
 client, err := inter.NewClient()
 // ...
 
@@ -30,6 +30,7 @@ log.Printf("Saldo: %+v", respSaldo.Disponivel)
 - **cobranca**: Gerencia a emissão e consulta de cobranças.
 - **pix**: Implementa funcionalidades relacionadas ao sistema PIX.
 - **erros**: Define estruturas para tratamento de erros.
+- **utils**: Utilitários gerais para manipulação de dados e formatação.
 
 ## Autenticação
 
@@ -45,6 +46,7 @@ Para configurar as credenciais padrão, defina as seguintes variáveis de ambien
 - `INTERBANK_CLIENT_SECRET`: O segredo do cliente obtido no detalhe da tela de aplicações no IB.
 - `INTERBANK_SCOPES`: Deve ser uma lista separada por vírgulas dos escopos desejados.
 - `INTERBANK_TLS_PATH`: Caminho para um arquivo contendo o certificado e a chave (tls.key e tls.crt).
+- `INTERBANK_USE_SANDBOX`: Define se a aplicação deve usar o ambiente de sandbox.
 
 #### Funções Principais
 
@@ -63,7 +65,7 @@ Define a estrutura do token de acesso e métodos para verificar sua validade.
 
 ## Serviços Bancários
 
-### banking/banking.go
+### banking/extrato.go
 
 Fornece métodos para consultar extratos e saldos.
 
@@ -81,7 +83,7 @@ Gerencia a emissão de cobranças.
 
 #### Funções Principais
 
-- `EmitirCobranca`: Emite uma nova cobrança.
+- `Emitir`: Emite uma nova cobrança.
 
 ## PIX
 
@@ -91,27 +93,33 @@ Implementa funcionalidades para transações PIX, incluindo consultas e devoluç
 
 #### Funções Principais
 
-- `ConsultarDevolucao`: Consulta a devolução de um PIX.
-- `SolicitarDevolucao`: Solicita a devolução de um PIX.
+- `Consultar`: Consulta um pix através de um determinado EndToEndId
 - `ConsultarRecebidos`: Consulta PIX recebidos.
+- `SolicitarDevolucao`: Solicita a devolução de um PIX.
+- `ConsultarDevolucao`: Consulta a devolução de um PIX.
 
-### pix/pix_cob_imediata.go
+### pix/pix_cob.go
 
 Gerencia cobranças imediatas via PIX.
 
 #### Funções Principais
 
 - `CriarCobrancaImediata`: Cria uma cobrança imediata.
+- `CriarCobrancaImediataComTxID`: Cria uma cobrança imediata com TxID.
+- `EditarCobrancaImediata`: Edita uma cobrança imediata.
 - `ConsultarCobrancaImediata`: Consulta uma cobrança imediata.
+- `ConsultarCobrancasImediatas`: Consulta cobranças imediatas.
 
-### pix/pix_cobv_imediata.go
+### pix/pix_cobv.go
 
 Gerencia cobranças com vencimento via PIX.
 
 #### Funções Principais
 
-- `CriarCobrancaImediataComVencimentoETxID`: Cria uma cobrança com vencimento e TxID.
-- `ConsultarCobrancasImediatasComVencimento`: Consulta cobranças com vencimento.
+- `CriarCobrancaComVencimentoETxID`: Cria uma cobrança com vencimento e TxID.
+- `ConsultarCobrancaComVencimento`: Consulta uma cobrança com vencimento.
+- `ConsultarCobrancasComVencimento`: Consulta cobranças com vencimento.
+- `EditarCobrancaComVencimento`: Edita uma cobrança com vencimento.
 
 ## Requisitos
 

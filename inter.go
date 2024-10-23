@@ -2,6 +2,7 @@ package inter
 
 import (
 	"context"
+	"os"
 
 	"github.com/raniellyferreira/interbank-go/auth"
 	"github.com/raniellyferreira/interbank-go/backend"
@@ -45,7 +46,16 @@ func NewClient() (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewClientWithCredentials(creds), nil
+
+	// Create the client
+	client := NewClientWithCredentials(creds)
+
+	// Check if we should use the sandbox
+	if os.Getenv("INTERBANK_USE_SANDBOX") == "true" {
+		client.UseSandBox()
+	}
+
+	return client, nil
 }
 
 // Token returns the current token

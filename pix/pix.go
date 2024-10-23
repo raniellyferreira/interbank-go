@@ -114,7 +114,7 @@ func (c *Service) ConsultarRecebidos(ctx context.Context, request *RecebidosRequ
 	return resp.Result().(*RecebidosResponse), nil
 }
 
-// consultaPix para consultar um pix através de um determinado EndToEndId
+// Consultar para consultar um pix através de um determinado EndToEndId
 func (c *Service) Consultar(ctx context.Context, endToEndId string) (*Response, error) {
 	token, err := c.backend.Token(ctx)
 	if err != nil {
