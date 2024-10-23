@@ -58,7 +58,7 @@ func NewClient() (*Client, error) {
 	return client, nil
 }
 
-// Token returns the current token
+// Token returns the current token or fetches a new one if it's expired (thread-safe)
 func (c *Client) Token(ctx context.Context) (*auth.Token, error) {
 	return c.backend.Token(ctx)
 }

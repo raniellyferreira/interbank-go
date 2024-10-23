@@ -2,6 +2,12 @@
 
 A biblioteca `interbank-go` é uma implementação em Go para interagir com a API do Banco Inter. Ela fornece funcionalidades para autenticação, operações bancárias, cobranças e transações PIX.
 
+## Instalação
+
+```bash
+go get github.com/raniellyferreira/interbank-go
+```
+
 ## Como usar
 
 ```go
