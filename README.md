@@ -1,6 +1,6 @@
 # Interbank-Go
 
-A biblioteca `interbank-go` é uma implementação em Go para interagir com a API do Banco Inter. Ela fornece funcionalidades para autenticação, operações bancárias, cobranças e transações PIX.
+A biblioteca `interbank-go` é uma implementação em Go para interagir com a API do Banco Inter. Ela fornece funcionalidades para autenticação (Token de acesso gerenciado automaticamente (thread-safe)), operações bancárias, cobranças e transações PIX.
 
 ## Instalação
 
@@ -58,16 +58,9 @@ Para configurar as credenciais padrão, defina as seguintes variáveis de ambien
 
 - `NewCredentials`: Cria novas credenciais.
 - `NewDefaultCredentials`: Carrega credenciais padrão a partir de variáveis de ambiente.
-- `SetTLS`: Configura o certificado TLS.
-
-### auth/token.go
-
-Define a estrutura do token de acesso e métodos para verificar sua validade.
-
-#### Funções Principais
-
-- `Valid`: Verifica se o token ainda é válido.
-- `GetAccessToken`: Retorna o token de acesso.
+- `credential.SetTLS`: Configura o certificado TLS.
+- `credential.SetScopesFromString`: Define os escopos a partir de uma string.
+- `credential.LoadCertAndKeyFromPath`: Carrega o certificado TLS e a chave privada dos caminhos fornecidos.
 
 ## Serviços Bancários
 

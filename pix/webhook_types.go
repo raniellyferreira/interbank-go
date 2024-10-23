@@ -5,8 +5,11 @@ type WebhookResponse struct {
 	WebhookURL string `json:"webhookUrl"`
 }
 
-// Callback representa um evento de webhook
-type Callback struct {
+// EmptyResponse representa uma resposta vazia
+type EmptyResponse struct{}
+
+// CallbackItem representa um evento de webhook
+type CallbackItem struct {
 	WebhookUrl      string `json:"webhookUrl"`
 	NumeroTentativa int32  `json:"numeroTentativa"`
 	DataHoraDisparo string `json:"dataHoraDisparo"`
@@ -15,10 +18,19 @@ type Callback struct {
 	MensagemErro    string `json:"mensagemErro"`
 }
 
-type CallbackResponse struct {
-	TotalElementos int64       `json:"totalElementos"`
-	TotalPaginas   int64       `json:"totalPaginas"`
-	PrimeiraPagina bool        `json:"primeiraPagina"`
-	UltimaPagina   bool        `json:"ultimaPagina"`
-	Data           []*Callback `json:"data"`
+type CallbacksResponse struct {
+	TotalElementos int64           `json:"totalElementos"`
+	TotalPaginas   int64           `json:"totalPaginas"`
+	PrimeiraPagina bool            `json:"primeiraPagina"`
+	UltimaPagina   bool            `json:"ultimaPagina"`
+	Data           []*CallbackItem `json:"data"`
+}
+
+// ConsultarWebhooksCallbacksRequest representa a requisição para consultar os eventos de um webhook
+type ConsultarWebhooksCallbacksRequest struct {
+	TxID           string `json:"txid,omitempty"`
+	DataHoraInicio string `json:"dataHoraInicio"`
+	DataHoraFim    string `json:"dataHoraFim"`
+	Pagina         int32  `json:"pagina,omitempty"`
+	TamanhoPagina  int32  `json:"tamanhoPagina,omitempty"`
 }

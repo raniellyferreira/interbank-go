@@ -72,13 +72,24 @@ func NewDefaultCredentials() (*Credentials, error) {
 	// Load TLS files
 	tlsPath := os.Getenv("INTERBANK_TLS_PATH")
 	if tlsPath != "" {
-		err := creds.LoadFromPath(filepath.Join(tlsPath, "tls.crt"), filepath.Join(tlsPath, "tls.key"))
+		err := creds.LoadCertAndKeyFromPath(filepath.Join(tlsPath, "tls.crt"), filepath.Join(tlsPath, "tls.key"))
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	return creds, nil
+}
+
+// GetTLS returns the TLS configuration
+func (c *Credentials) GetTLS() *tls.Config {
+	if c.cert == nil {
+		return nil
+	}
+
+	return &tls.Config{
+		Certificates: []tls.Certificate{*c.cert},
+	}
 }
 
 // SetTLS sets the TLS certificate and key
@@ -90,8 +101,8 @@ func (c *Credentials) SetTLS(cert, key []byte) *Credentials {
 	return c
 }
 
-// LoadFromPath loads the TLS certificate and key from the given paths
-func (c *Credentials) LoadFromPath(certPath, keyPath string) error {
+// LoadCertAndKeyFromPath loads the TLS certificate and key from the given paths
+func (c *Credentials) LoadCertAndKeyFromPath(certPath, keyPath string) error {
 	// Load the certificate and key
 	cert, err := tls.LoadX509KeyPair(certPath, keyPath)
 	if err != nil {
@@ -112,7 +123,7 @@ func (c *Credentials) GetScopes() []Scope {
 	return c.scopes
 }
 
-// GetScopesString returns the scopes as a comma-separated string
+// GetScopesString returns the scopes as a space-separated string
 func (c *Credentials) GetScopesString() string {
 	scopes := make([]string, len(c.scopes))
 	for i, scope := range c.scopes {
@@ -160,15 +171,4 @@ func (c *Credentials) SetScopesFromString(scopes string) *Credentials {
 		c.scopes[i] = Scope(scope)
 	}
 	return c
-}
-
-// GetTLS returns the TLS configuration
-func (c *Credentials) GetTLS() *tls.Config {
-	if c.cert == nil {
-		return nil
-	}
-
-	return &tls.Config{
-		Certificates: []tls.Certificate{*c.cert},
-	}
 }

@@ -21,11 +21,12 @@ type RecebidosRequest struct {
 
 // RecebidosResponse representa a resposta de pix recebidos
 type RecebidosResponse struct {
-	Pix []*Response `json:"pix"`
+	Parametros *ParametrosConsulta `json:"parametros"`
+	Pix        []*Pix              `json:"pix"`
 }
 
-// Response representa a resposta de um pix
-type Response struct {
+// Pix representa a resposta de um pix
+type Pix struct {
 	// EndToEndID é o identificador único do pix
 	EndToEndID string `json:"endToEndId"`
 
@@ -55,7 +56,7 @@ type Response struct {
 	ComponentesValor *ComponentesValor `json:"componentesValor,omitempty"`
 
 	// Horário em que o Pix foi processado no PSP.
-	Horario time.Time `json:"horario"`
+	Horario string `json:"horario"`
 
 	// Informação livre do pagador
 	InfoPagador string `json:"infoPagador"`

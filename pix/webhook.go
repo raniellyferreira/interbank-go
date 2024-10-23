@@ -5,10 +5,11 @@ import (
 	"path"
 
 	"github.com/raniellyferreira/interbank-go/erros"
+	interutils "github.com/raniellyferreira/interbank-go/utils"
 )
 
 // CriarWebhook cria um webhook para receber notificações de pix
-func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) (*WebhookResponse, error) {
+func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) (*EmptyResponse, error) {
 	token, err := c.backend.Token(ctx)
 	if err != nil {
 		return nil, err
@@ -16,7 +17,7 @@ func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) (*
 
 	req := c.backend.Req().
 		SetContext(ctx).
-		SetResult(&WebhookResponse{}).
+		SetResult(&EmptyResponse{}).
 		SetError(&erros.Response{}).
 		SetAuthToken(token.GetAccessToken()).
 		SetHeader("Content-Type", "application/json").
@@ -38,7 +39,7 @@ func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) (*
 		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
 	}
 
-	return resp.Result().(*WebhookResponse), nil
+	return resp.Result().(*EmptyResponse), nil
 }
 
 // ConsultarWebhook consulta um webhook
@@ -101,7 +102,7 @@ func (c *Service) DeletarWebhook(ctx context.Context, chave string) error {
 }
 
 // ConsultarWebhookCallbacks consulta os eventos de um webhook
-func (c *Service) ConsultarWebhookCallbacks(ctx context.Context) ([]*Callback, error) {
+func (c *Service) ConsultarWebhookCallbacks(ctx context.Context, request *ConsultarWebhooksCallbacksRequest) (*CallbacksResponse, error) {
 	token, err := c.backend.Token(ctx)
 	if err != nil {
 		return nil, err
@@ -109,9 +110,13 @@ func (c *Service) ConsultarWebhookCallbacks(ctx context.Context) ([]*Callback, e
 
 	req := c.backend.Req().
 		SetContext(ctx).
-		SetResult(&[]*Callback{}).
+		SetResult(&CallbacksResponse{}).
 		SetError(&erros.Response{}).
 		SetAuthToken(token.GetAccessToken())
+
+	if request != nil {
+		req.SetQueryParams(interutils.StructToMap(request))
+	}
 
 	resp, err := req.Get(path.Join(pixEndpoint, "webhook/callbacks"))
 	if err != nil {
@@ -127,5 +132,5 @@ func (c *Service) ConsultarWebhookCallbacks(ctx context.Context) ([]*Callback, e
 		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
 	}
 
-	return *resp.Result().(*[]*Callback), nil
+	return resp.Result().(*CallbacksResponse), nil
 }

@@ -34,14 +34,14 @@ type ValorCobranca struct {
 	Original            string              `json:"original"`                      // Valor original da cobrança
 	ModalidadeAlteracao ModalidadeAlteracao `json:"modalidadeAlteracao,omitempty"` // Modalidade de alteração
 
-	Retirada *ComponenteValorPix `json:"retirada,omitempty"` // Componente de valor de retirada
+	Retirada *ComponenteValorCobranca `json:"retirada,omitempty"` // Componente de valor de retirada
 
-	Saque *ComponenteValorPix `json:"saque,omitempty"` // Componente de valor de saque
+	Saque *ComponenteValorCobranca `json:"saque,omitempty"` // Componente de valor de saque
 
-	Troco *ComponenteValorPix `json:"troco,omitempty"` // Componente de valor de troco
+	Troco *ComponenteValorCobranca `json:"troco,omitempty"` // Componente de valor de troco
 }
 
-type ComponenteValorPix struct {
+type ComponenteValorCobranca struct {
 	Valor                     string              `json:"valor,omitempty"`                     // Valor da cobrança
 	ModalidadeAgente          ModalidadeAgente    `json:"modalidadeAgente,omitempty"`          // Modalidade de agente
 	ModalidadeAlteracao       ModalidadeAlteracao `json:"modalidadeAlteracao,omitempty"`       // Modalidade de alteração

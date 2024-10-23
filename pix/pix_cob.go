@@ -167,37 +167,3 @@ func (c *Service) CriarCobrancaImediata(ctx context.Context, request *CobrancaIm
 
 	return resp.Result().(*CobrancaImediataResponse), nil
 }
-
-// PagarCobrancaImediata paga uma cobrança imediata. (SandBox apenas)
-func (c *Service) PagarCobrancaImediata(ctx context.Context, tipoCob TipoCobranca, txID, valor string) (*map[string]interface{}, error) {
-	token, err := c.backend.Token(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	req := c.backend.Req().
-		SetContext(ctx).
-		SetResult(&map[string]interface{}{}).
-		SetError(&erros.Response{}).
-		SetAuthToken(token.GetAccessToken()).
-		SetHeader("Content-Type", "application/json").
-		SetBody(map[string]interface{}{
-			"valor": valor,
-		})
-
-	resp, err := req.Post(path.Join(pixEndpoint, string(tipoCob), "pagar", txID))
-	if err != nil {
-		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
-	}
-
-	// Check for errors
-	if resp.IsError() {
-		errResp, ok := resp.Error().(*erros.Response)
-		if ok {
-			return nil, errResp.WithStatus(resp.StatusCode())
-		}
-		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
-	}
-
-	return resp.Result().(*map[string]interface{}), nil
-}

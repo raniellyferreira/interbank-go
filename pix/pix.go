@@ -115,7 +115,7 @@ func (c *Service) ConsultarRecebidos(ctx context.Context, request *RecebidosRequ
 }
 
 // Consultar para consultar um pix através de um determinado EndToEndId
-func (c *Service) Consultar(ctx context.Context, endToEndId string) (*Response, error) {
+func (c *Service) Consultar(ctx context.Context, endToEndId string) (*Pix, error) {
 	token, err := c.backend.Token(ctx)
 	if err != nil {
 		return nil, err
@@ -123,7 +123,7 @@ func (c *Service) Consultar(ctx context.Context, endToEndId string) (*Response, 
 
 	req := c.backend.Req().
 		SetContext(ctx).
-		SetResult(&Response{}).
+		SetResult(&Pix{}).
 		SetError(&erros.Response{}).
 		SetAuthToken(token.GetAccessToken())
 
@@ -141,5 +141,39 @@ func (c *Service) Consultar(ctx context.Context, endToEndId string) (*Response, 
 		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
 	}
 
-	return resp.Result().(*Response), nil
+	return resp.Result().(*Pix), nil
+}
+
+// PagarCobranca paga uma cobrança imediata. (SandBox apenas)
+func (c *Service) PagarCobranca(ctx context.Context, tipoCob TipoCobranca, txID, valor string) (*map[string]interface{}, error) {
+	token, err := c.backend.Token(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	req := c.backend.Req().
+		SetContext(ctx).
+		SetResult(&map[string]interface{}{}).
+		SetError(&erros.Response{}).
+		SetAuthToken(token.GetAccessToken()).
+		SetHeader("Content-Type", "application/json").
+		SetBody(map[string]interface{}{
+			"valor": valor,
+		})
+
+	resp, err := req.Post(path.Join(pixEndpoint, string(tipoCob), "pagar", txID))
+	if err != nil {
+		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
+	}
+
+	// Check for errors
+	if resp.IsError() {
+		errResp, ok := resp.Error().(*erros.Response)
+		if ok {
+			return nil, errResp.WithStatus(resp.StatusCode())
+		}
+		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
+	}
+
+	return resp.Result().(*map[string]interface{}), nil
 }
