@@ -1,12 +1,14 @@
 package pix
 
+// WebhookCall representa um evento de webhook para o endpoint do callback
+type WebhookCall struct {
+	Pix []*Pix `json:"pix"`
+}
+
 // WebhookResponse representa a resposta da criação de um webhook
 type WebhookResponse struct {
 	WebhookURL string `json:"webhookUrl"`
 }
-
-// EmptyResponse representa uma resposta vazia
-type EmptyResponse struct{}
 
 // CallbackItem representa um evento de webhook
 type CallbackItem struct {

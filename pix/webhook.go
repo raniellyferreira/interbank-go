@@ -9,15 +9,14 @@ import (
 )
 
 // CriarWebhook cria um webhook para receber notificações de pix
-func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) (*EmptyResponse, error) {
+func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) error {
 	token, err := c.backend.Token(ctx)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	req := c.backend.Req().
 		SetContext(ctx).
-		SetResult(&EmptyResponse{}).
 		SetError(&erros.Response{}).
 		SetAuthToken(token.GetAccessToken()).
 		SetHeader("Content-Type", "application/json").
@@ -27,19 +26,19 @@ func (c *Service) CriarWebhook(ctx context.Context, chave, webhookUrl string) (*
 
 	resp, err := req.Put(path.Join(pixEndpoint, "webhook", chave))
 	if err != nil {
-		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
+		return erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
 	}
 
 	// Check for errors
 	if resp.IsError() {
 		errResp, ok := resp.Error().(*erros.Response)
 		if ok {
-			return nil, errResp.WithStatus(resp.StatusCode())
+			return errResp.WithStatus(resp.StatusCode())
 		}
-		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
+		return erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
 	}
 
-	return resp.Result().(*EmptyResponse), nil
+	return nil
 }
 
 // ConsultarWebhook consulta um webhook
