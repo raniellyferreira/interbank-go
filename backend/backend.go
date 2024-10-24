@@ -78,7 +78,7 @@ func (ts *BackendImplement) Token(ctx context.Context) (*auth.Token, error) {
 		ts.token = token
 
 		// Set the expiration time
-		ts.token.SetExpiresAt(time.Now().Add(time.Duration(ts.token.ExpiresIn) * time.Second))
+		ts.token.SetExpiresAt(time.Now().Add(time.Duration(ts.token.ExpiresIn-180) * time.Second))
 	}
 
 	return ts.token, nil
