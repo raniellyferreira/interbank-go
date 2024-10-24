@@ -103,8 +103,8 @@ func (s *Service) ConsultarWebhookCallbacks(ctx context.Context, request *Consul
 	return resp.Result().(*WebhookCallbacksResponse), nil
 }
 
-// DeleteWebhook represents a response to delete a webhook
-func (s *Service) DeleteWebhook(ctx context.Context) error {
+// DeletarWebhook represents a response to delete a webhook
+func (s *Service) DeletarWebhook(ctx context.Context) error {
 	token, err := s.backend.Token(ctx)
 	if err != nil {
 		return err
