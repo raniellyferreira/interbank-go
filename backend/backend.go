@@ -47,6 +47,12 @@ func NewBackendWithCredentials(creds *auth.Credentials) *BackendImplement {
 	}
 }
 
+// SetTimeout sets the timeout for the backend
+func (c *BackendImplement) SetTimeout(timeout time.Duration) *BackendImplement {
+	c.client.SetTimeout(timeout)
+	return c
+}
+
 // SetURL sets the base URL for the backend
 func (c *BackendImplement) SetURL(url string) *BackendImplement {
 	c.client.SetBaseURL(url)

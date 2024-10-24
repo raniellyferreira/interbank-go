@@ -3,6 +3,7 @@ package inter
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/raniellyferreira/interbank-go/auth"
 	"github.com/raniellyferreira/interbank-go/backend"
@@ -29,7 +30,12 @@ type Client struct {
 func NewClientWithCredentials(creds *auth.Credentials) *Client {
 	// Create the backend
 	backend := backend.NewBackendWithCredentials(creds)
+
+	// Set the default URL
 	backend.SetURL("https://cdpj.partners.bancointer.com.br")
+
+	// Set the default timeout
+	backend.SetTimeout(60 * time.Second)
 
 	return &Client{
 		backend: backend,
@@ -56,6 +62,12 @@ func NewClient() (*Client, error) {
 	}
 
 	return client, nil
+}
+
+// SetTimeout sets the timeout for the client
+func (c *Client) SetTimeout(timeout time.Duration) *Client {
+	c.backend.SetTimeout(timeout)
+	return c
 }
 
 // Token returns the current token or fetches a new one if it's expired (thread-safe)
