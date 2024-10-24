@@ -62,7 +62,7 @@ type Pix struct {
 	InfoPagador string `json:"infoPagador"`
 
 	// Devoluções
-	Devolucoes []*DevolucaoResponse `json:"devolucoes"`
+	Devolucoes []*DevolucaoResponse `json:"devolucoes,omitempty"`
 }
 
 // ComponentesValor representa os componentes do valor de um pix
@@ -92,7 +92,7 @@ type ComponentesValor struct {
 // ComponenteValor representa o valor original de um pix
 type ComponenteValor struct {
 	// Valor é o valor original do pix
-	Valor float64 `json:"valor,omitempty"`
+	Valor string `json:"valor,omitempty"`
 
 	ModalidadeAgente ModalidadeAgente `json:"modalidadeAgente"`
 
