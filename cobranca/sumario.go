@@ -75,7 +75,7 @@ func (s *Service) Sumario(ctx context.Context, request *SumarioRequest) (*[]Suma
 		req.SetQueryParams(interutils.StructToMap(request))
 	}
 
-	resp, err := req.Post(path.Join(cobrancaEndpoint, "sumario"))
+	resp, err := req.Get(path.Join(cobrancaEndpoint, "sumario"))
 	if err != nil {
 		return nil, erros.NewErrorWithStatus(resp.StatusCode(), resp.String())
 	}
